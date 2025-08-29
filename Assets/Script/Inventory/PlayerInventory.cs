@@ -1,27 +1,27 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class PlayerInventory : MonoBehaviour, IInventory, IInventoryEquipped, IWallet
+public class PlayerInventory : IInventory, IInventoryEquipped, IWallet
 {
 	// Constants
 	private const int c_numberOfWeapons = 2;
-	private const int c_numberOfConsumables = 3;
+	private const int c_numberOfPotions = 3;
 
 	// Inventory
-	private Dictionary<ItemType, List<IItem>> _playerItems;
-	private IItem[] _equippedWeapons;
-	private IItem[] _equippedConsumables;
+	private readonly Dictionary<ItemType, List<IItem>> _playerItems;
+	private readonly IWeapon[] _equippedWeapons;
+	private readonly IPotion[] _equippedConsumables;
 
 	// Wallet
 	private float _money;
 
-	// MonoBehaviour
-	private void Awake()
+	// Initialization
+	public PlayerInventory()
 	{
 		_playerItems = new();
-		_equippedConsumables = new IItem[c_numberOfConsumables];
-		_equippedWeapons = new IItem[c_numberOfWeapons];
+		_equippedConsumables = new IPotion[c_numberOfPotions];
+		_equippedWeapons = new IWeapon[c_numberOfWeapons];
+		
 		InitializeItemsList();
 	}
 
@@ -62,13 +62,13 @@ public class PlayerInventory : MonoBehaviour, IInventory, IInventoryEquipped, IW
 	}
 
 	// Inventory Equipped Functions
-	public void RegisterWeapon(int weaponIdx, IItem item) => _equippedWeapons[weaponIdx] = item;
+	public void RegisterWeapon(int weaponIdx, IWeapon item) => _equippedWeapons[weaponIdx] = item;
 	public void UnregisterWeapon(int weaponIdx) => _equippedWeapons[weaponIdx] = null;
-	public IItem GetWeapon(int weaponIdx) => _equippedWeapons[weaponIdx];
+	public IWeapon GetWeapon(int weaponIdx) => _equippedWeapons[weaponIdx];
 
-	public void RegisterConsumable(int consumableIdx, IItem item) => _equippedConsumables[consumableIdx] = item;
+	public void RegisterConsumable(int consumableIdx, IPotion item) => _equippedConsumables[consumableIdx] = item;
 	public void UnregisterConsumable(int consumableIdx) => _equippedConsumables[consumableIdx] = null;
-	public IItem GetConsumable(int consumableIdx) => _equippedConsumables[consumableIdx];
+	public IPotion GetConsumable(int consumableIdx) => _equippedConsumables[consumableIdx];
 
 	// Wallet Functions
 	public float GetMoneyQuantity() => _money;
