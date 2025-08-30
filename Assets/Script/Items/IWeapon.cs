@@ -3,5 +3,5 @@ public interface IWeapon
 	public float LowestDamage { get; }
 	public float HighestDamage { get; }
 
-	public void UpdateWeaponValues(EntityStatusSheet statusSheet);
+	public void UpdateWeaponValues(IStatusSheet statusSheet);
 }

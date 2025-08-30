@@ -2,8 +2,7 @@ public class HealingPotion : IItem, IPotion
 {
 	// Parameters
 	private int _numberOfCopies = 1;
-
-	private const float _healingValue = 300.0f;
+	private const float _healingValue = 78.0f;
 
 	// Properties
 	public int Quantity => _numberOfCopies;
@@ -14,9 +13,8 @@ public class HealingPotion : IItem, IPotion
 	public void RemoveItem() => _numberOfCopies--;
 
 	// Potion Functions
-	public void UsePostion(EntityStatusSheet statusSheet)
+	public void UsePostion(IStatusSheet statusSheet)
 	{
-		var health = _healingValue;
-		throw new System.NotImplementedException();
+		statusSheet.Health += _healingValue;
 	}
 }

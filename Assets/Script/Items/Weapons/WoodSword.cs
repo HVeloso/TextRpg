@@ -20,11 +20,9 @@ public class WoodSword : IItem, IWeapon
 	public void RemoveItem() => _numberOfCopies--;
 	
 	// Weapon Functions
-	public void UpdateWeaponValues(EntityStatusSheet statusSheet)
+	public void UpdateWeaponValues(IStatusSheet statusSheet)
 	{
-		_lowestDamage = 1 * c_lowestDamageMultiplier;
-		_highestDamage = 1 * c_highestDamageMultiplier;
-
-		throw new System.NotImplementedException();
+		_lowestDamage = statusSheet.Strength * c_lowestDamageMultiplier;
+		_highestDamage = statusSheet.Strength * c_highestDamageMultiplier;
 	}
 }
