@@ -18,11 +18,13 @@ public class WoodSword : IItem, IWeapon
 	// Item Functions
 	public void AddItem() => _numberOfCopies++;
 	public void RemoveItem() => _numberOfCopies--;
-	
+
 	// Weapon Functions
 	public void UpdateWeaponValues(IStatusSheet statusSheet)
 	{
-		_lowestDamage = statusSheet.Strength * c_lowestDamageMultiplier;
-		_highestDamage = statusSheet.Strength * c_highestDamageMultiplier;
+		float currentStrength = statusSheet.GetStat(StatType.Strength).GetValue(StatValueType.Current);
+
+		_lowestDamage = currentStrength * c_lowestDamageMultiplier;
+		_highestDamage = currentStrength * c_highestDamageMultiplier;
 	}
 }

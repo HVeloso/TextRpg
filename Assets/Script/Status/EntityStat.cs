@@ -1,39 +1,81 @@
+using UnityEngine;
+using System.Collections.Generic;
+
 public class EntityStat
 {
-    // Variables
-    public  float _maxValue;
-    private float _minValue;
-    private float _currentValue;
+	// Variables
+	public readonly Dictionary<StatValueType, float> _statValues = new()
+	{
+		{StatValueType.Maximum, 0f},
+		{StatValueType.Current, 0f},
+		{StatValueType.Minimum, 0f},
+	};
 
-    // Properties
-    public float MaxValue
-    {
-        get { return _maxValue; }
-        set {
-            _maxValue = value;
-            if (_maxValue < _currentValue) 
-                _currentValue = _maxValue;
-        }
-    }
+	// Initialization
+	public EntityStat() { }
+	public EntityStat(Dictionary<StatValueType, float> statValue) => _statValues = new(statValue);
 
-    public float MinValue
-    {
-        get { return _minValue; }
-        set
-        {
-            _minValue = value;
-            if (_minValue > _currentValue)
-                _currentValue = _minValue;
-        }
-    }
+	// Stat Value Management
+	public float GetValue(StatValueType valueType)
+	{
+		if (!_statValues.ContainsKey(valueType))
+		{
+			Debug.LogError($"Stat value do not contains '{valueType}' key.");
+			return -1f;
+		}
 
-    public float CurrentValue { get { return _currentValue; } set { _currentValue = value; } }
+		return _statValues[valueType];
+	}
 
-    // Initialization
-    public EntityStat(float _minValue = 0f, float _maxValue = 0f, float _starterValue = 0f)
-    {
-        this._minValue = _minValue;
-        this._maxValue = _maxValue;
-        _currentValue = _starterValue;
-    }
+	public void UpdateValue(StatValueType valueType, float newValue)
+	{
+		switch (valueType)
+		{
+			case StatValueType.Minimum: SetMinValue(newValue);
+				break;
+
+			case StatValueType.Maximum: SetMaxValue(newValue);
+				break;
+
+			case StatValueType.Current: SetCurretValue(newValue);
+				break;
+
+			default: Debug.LogError($"Stat value do not contains '{valueType}' key.");
+				break;
+		}
+	}
+	
+	private void SetMaxValue(float value)
+	{
+		_statValues[StatValueType.Maximum] = value;
+
+		if (_statValues[StatValueType.Maximum] < _statValues[StatValueType.Current])
+			_statValues[StatValueType.Current] = value;
+
+		if (_statValues[StatValueType.Maximum] < _statValues[StatValueType.Minimum])
+			_statValues[StatValueType.Minimum] = value;
+	}
+
+	private void SetMinValue(float value)
+	{
+		if (value <= 0f)
+		{
+			Debug.LogError($"Stat value can not be lower than zero.");
+			value = 0f;
+		}
+
+		_statValues[StatValueType.Minimum] = value;
+
+		if (_statValues[StatValueType.Minimum] > _statValues[StatValueType.Current])
+			_statValues[StatValueType.Current] = value;
+
+		if (_statValues[StatValueType.Minimum] > _statValues[StatValueType.Maximum])
+			_statValues[StatValueType.Maximum] = value;
+	}
+
+	private void SetCurretValue(float value)
+	{
+		_statValues[StatValueType.Current] = 
+			Mathf.Clamp(value, _statValues[StatValueType.Minimum], _statValues[StatValueType.Minimum]);
+	}
 }

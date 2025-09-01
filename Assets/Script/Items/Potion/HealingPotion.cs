@@ -15,6 +15,9 @@ public class HealingPotion : IItem, IPotion
 	// Potion Functions
 	public void UsePostion(IStatusSheet statusSheet)
 	{
-		statusSheet.Health += _healingValue;
+		float currentHelath = statusSheet.GetStat(StatType.Health).GetValue(StatValueType.Current);
+		currentHelath += _healingValue;
+
+		statusSheet.UpdateStatValue(StatType.Health, StatValueType.Current, currentHelath);
 	}
 }

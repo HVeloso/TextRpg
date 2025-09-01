@@ -1,19 +1,25 @@
 using System.Collections.Generic;
-using UnityEditor;
+using UnityEngine;
 
 public class EntityStatusSheet : IStatusSheet
 {
-	private Dictionary<StatType, EntityStat> _statusSheet;
+	// Variables
+	private readonly Dictionary<StatType, EntityStat> _statusSheet;
 
-	public EntityStatusSheet(Dictionary<StatType, EntityStat> newStatusSheet)
+	// Initialization
+	public EntityStatusSheet(Dictionary<StatType, EntityStat> baseStatusSheet) => _statusSheet = new(baseStatusSheet);
+
+	// Stat Functions
+	public EntityStat GetStat(StatType type) => _statusSheet[type];
+
+	public void UpdateStatValue(StatType type, StatValueType valueType, float newValue)
 	{
-		_statusSheet = new(newStatusSheet);
+		if (!_statusSheet.ContainsKey(type))
+		{
+			Debug.LogError($"Status sheet do not contains '{type}' key.");
+			return;
+		}
+
+		_statusSheet[type].UpdateValue(valueType, newValue);
 	}
-
-    public EntityStat GetStat(StatType type) => _statusSheet[type];
-
-    public void UpdateStatValue(StatType type, StatValueType valueType, float newValue)
-    {
-		//_statusSheet[type]
-    }
 }
