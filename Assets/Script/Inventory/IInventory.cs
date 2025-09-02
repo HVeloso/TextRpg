@@ -4,5 +4,6 @@ public interface IInventory
 {
 	public List<IItem> GetItems(ItemType type);
 	public void AddItem(IItem item);
+	public void SubtractItem(IItem item);
 	public void RemoveItem(IItem item);
 }

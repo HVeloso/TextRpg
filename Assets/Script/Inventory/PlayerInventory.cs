@@ -11,7 +11,7 @@ public class PlayerInventory : IInventory, IInventoryEquipped, IWallet
 	private readonly Dictionary<ItemType, List<IItem>> _playerItems;
 	private readonly IWeapon[] _equippedWeapons;
 	private readonly IPotion[] _equippedConsumables;
-
+	
 	// Wallet
 	private float _money;
 
@@ -49,7 +49,7 @@ public class PlayerInventory : IInventory, IInventoryEquipped, IWallet
 		}
 	}
 
-	public void RemoveItem(IItem item)
+	public void SubtractItem(IItem item)
 	{
 		if (!_playerItems[item.Type].Contains(item)) return;
 
@@ -59,6 +59,13 @@ public class PlayerInventory : IInventory, IInventoryEquipped, IWallet
 
 		if (_playerItems[item.Type][idx].Quantity <= 0)
 			_playerItems[item.Type].Remove(item);
+	}
+
+	public void RemoveItem(IItem item)
+	{
+		if (!_playerItems[item.Type].Contains(item)) return;
+
+		_playerItems[item.Type].Remove(item);
 	}
 
 	// Inventory Equipped Functions
