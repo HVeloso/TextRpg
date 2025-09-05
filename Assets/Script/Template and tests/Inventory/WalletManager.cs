@@ -16,14 +16,16 @@ public class WalletManager : MonoBehaviour
 	private IWallet _playerWallet;
 	private bool _warningIsActive;
 
-	private void Awake() => _playerWallet = ServiceLocator.Get<IWallet>();
+	private void Awake() => _playerWallet = ServiceLocator.Get<PlayerWallet>();
 
 	private void Start()
 	{
 		_increaseMoneyButton.onClick.AddListener(IncreaseMoney);
 		_decreaseMoneyButton.onClick.AddListener(DecreaseMoney);
+
 		_warningText.gameObject.SetActive(false);
 		_warningIsActive = false;
+
 		UpdateTextUI();
 	}
 
@@ -38,10 +40,7 @@ public class WalletManager : MonoBehaviour
 	private void DecreaseMoney()
 	{
 		if (_playerWallet.TryBuy(7f)) UpdateTextUI();
-		else
-		{
-			if (!_warningIsActive) StartCoroutine(WarningMessage());
-		}
+		else if (!_warningIsActive) StartCoroutine(WarningMessage());
 	}
 
 	private IEnumerator WarningMessage()

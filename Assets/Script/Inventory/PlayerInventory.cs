@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class PlayerInventory : IInventory, IInventoryEquipped, IWallet
+public class PlayerInventory : IInventory, IInventoryEquipped
 {
 	// Constants
 	private const int c_numberOfWeapons = 2;
@@ -12,16 +12,13 @@ public class PlayerInventory : IInventory, IInventoryEquipped, IWallet
 	private readonly IWeapon[] _equippedWeapons;
 	private readonly IPotion[] _equippedConsumables;
 	
-	// Wallet
-	private float _money;
-
 	// Initialization
 	public PlayerInventory()
 	{
 		_playerItems = new();
 		_equippedConsumables = new IPotion[c_numberOfPotions];
 		_equippedWeapons = new IWeapon[c_numberOfWeapons];
-		
+
 		InitializeItemsList();
 	}
 
@@ -76,21 +73,4 @@ public class PlayerInventory : IInventory, IInventoryEquipped, IWallet
 	public void RegisterConsumable(int consumableIdx, IPotion item) => _equippedConsumables[consumableIdx] = item;
 	public void UnregisterConsumable(int consumableIdx) => _equippedConsumables[consumableIdx] = null;
 	public IPotion GetConsumable(int consumableIdx) => _equippedConsumables[consumableIdx];
-
-	// Wallet Functions
-	public float GetMoneyQuantity() => _money;
-
-	public void IncreaseMoney(float moneyToAdd)
-	{
-		if (moneyToAdd < 0) return;
-		_money += moneyToAdd;
-	}
-
-	public bool TryBuy(float moneyToDecrease)
-	{
-		if (moneyToDecrease < 0f || moneyToDecrease > _money) return false;
-
-		_money -= moneyToDecrease;
-		return true;
-	}
 }
